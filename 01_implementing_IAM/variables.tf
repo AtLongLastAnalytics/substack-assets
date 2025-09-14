@@ -5,7 +5,7 @@
 # https://opensource.org/licenses/MIT
 #
 # Repository: https://github.com/AtLongLastAnalytics/substack-companion-code 
-# Project: Azure IAM Anti-Patterns: Avoid Putting Your Data at Risk
+# Project: Implementing IAM as a Data Engineer: A Practical Example
 # Author: Robert Long
 # Date: 2025-09
 # Version: 1.0.0

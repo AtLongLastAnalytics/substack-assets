@@ -1,7 +1,5 @@
-## IAM 
-### Substack article: 
-
-# Azure IAM & Storage Terraform Module
+# Implementing IAM as a Data Engineer: A Practical Example
+### Substack article: Implementing IAM as a Data Engineer: A Practical Example
 
 This Terraform project deploys a simple Azure environment for a data engineering use case, including:
 
@@ -50,8 +48,8 @@ Before deploying, ensure you have:
   - `gp-data-engineer`: Members can ingest and curate data
   - `gp-data-analyst`: Members can consume curated data
 - **Role Assignments:**
-  - Data Engineers → `Storage Blob Data Contributor` (full container access)
-  - Data Analysts → `Storage Blob Data Reader` (read-only, `serve` container)
+  - Data Engineers (`gp-data-engineer`): Assigned the `Storage Blob Data Contributor` role at the storage account level, granting read/write access to all containers.
+  - Data Analysts (`gp-data-analyst`): Assigned the `Storage Blob Data Reader` role scoped only to the `serve` container, granting read-only access to curated data.
 
 ---
 
@@ -106,12 +104,26 @@ After deployment, outputs will display resource names, endpoints, and AAD group 
 
 When done you can use `terraform destroy` to tear down any resources deployed within this Azure project.
 
-Best Practices
+---
 
-Do not commit secrets or .tfstate files — use a .gitignore.
+## IAM Implementation Details
 
-Use remote state storage (e.g., Azure Storage Account with locking) for collaborative environments.
+This module demonstrates a practical IAM pattern for data engineering in Azure:
 
-Apply tags consistently for governance and cost tracking.
+- **Azure AD Groups:**
+  - `gp-data-engineer`: For users who ingest raw data and create curated datasets.
+  - `gp-data-analyst`: For users who consume curated data for analysis and reporting.
+- **Role Assignments:**
+  - Data Engineers are granted the `Storage Blob Data Contributor` role at the storage account scope, enabling full access to all containers.
+  - Data Analysts are granted the `Storage Blob Data Reader` role scoped to the `serve` container only, restricting them to read-only access of curated data.
 
-Use separate environments (dev, test, prod) with appropriate naming conventions.
+This separation of duties ensures that data engineers can manage and curate data, while analysts have secure, read-only access to the curated datasets.
+
+---
+
+## Best Practices
+
+- Do not commit secrets or .tfstate files — use a .gitignore.
+- Use remote state storage (e.g., Azure Storage Account with locking) for collaborative environments.
+- Apply tags consistently for governance and cost tracking.
+- Use separate environments (dev, test, prod) with appropriate naming conventions.
